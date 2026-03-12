@@ -9,6 +9,13 @@ src/.venv/
 venv/
 env/
 
+# Dữ liệu ảnh (quá lớn để push lên GitHub)
+data/train_data/
+data/test_data/
+
+# Model weights
+models/*.pth
+
 # Local runtime artifacts
 temp_uploads/
 src/api/temp_uploads/
