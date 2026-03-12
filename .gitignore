@@ -1,0 +1,20 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+src/.venv/
+venv/
+env/
+
+# Local runtime artifacts
+temp_uploads/
+src/api/temp_uploads/
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
