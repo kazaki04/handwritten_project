@@ -108,21 +108,20 @@ class HandwrittenDataset(Dataset):
 
 
 def collate_fn(batch):
-    """Custom collate function cho DataLoader.
-    Gộp batch với label có độ dài khác nhau (padding).
-    
-    Returns:
-        images:        (batch, 1, H, W)
-        labels:        (tổng_ký_tự,)  - nối tất cả label lại
-        label_lengths: (batch,)       - độ dài từng label
     """
-    images, labels = zip(*batch)
+    Hàm tùy chỉnh để xử lý batch trong DataLoader.
+    - Resize ảnh về cùng kích thước.
+    - Nối các label thành một tensor duy nhất.
+    """
+    images = [item[0] for item in batch]
+    labels = [item[1] for item in batch]  # Giữ labels là một list các tensor
+    label_lengths = [len(label) for label in labels]
 
-    # Stack ảnh thành batch
-    images = torch.stack(images, dim=0)
+    # Xử lý ảnh
+    processed_images = torch.stack(images, 0)
 
-    # Nối tất cả label indices lại (CTC loss yêu cầu)
-    label_lengths = torch.tensor([len(l) for l in labels], dtype=torch.long)
-    labels_concat = torch.cat(labels, dim=0)
+    # Xử lý labels và lengths
+    all_labels = torch.cat(labels)
+    all_label_lengths = torch.tensor(label_lengths, dtype=torch.long)
 
-    return images, labels_concat, label_lengths
+    return processed_images, all_labels, all_label_lengths

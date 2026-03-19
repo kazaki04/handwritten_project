@@ -7,11 +7,28 @@ import requests
 from PIL import Image
 
 API_URL = "http://localhost:8000/api/recognize"
+MODEL_INFO_URL = "http://localhost:8000/api/model-info"
 
 st.set_page_config(page_title="AI Nhận diện chữ viết tay", layout="wide", page_icon="📝")
 
 st.title("Hệ thống Nhận diện Chữ viết tay Tiếng Việt")
 st.markdown("**Model: CNN + BiLSTM + CTC (tự xây dựng)**")
+
+try:
+    model_info_resp = requests.get(MODEL_INFO_URL, timeout=10)
+    if model_info_resp.status_code == 200:
+        model_info = model_info_resp.json()
+        if model_info.get("loaded"):
+            st.caption(
+                f"Best model: `{model_info.get('model_name', 'ocr_model.pth')}` | "
+                f"Epoch: {model_info.get('epoch', 'N/A')} | "
+                f"Val CER: {model_info.get('val_cer', 'N/A')}"
+            )
+        else:
+            st.caption("Chưa load được trọng số model, backend đang dùng random weights.")
+except Exception:
+    st.caption("Không lấy được thông tin model từ backend.")
+
 st.markdown("---")
 
 col1, col2 = st.columns(2)
@@ -24,7 +41,7 @@ with col1:
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Ảnh gốc", use_column_width=True)
+        st.image(image, caption="Ảnh gốc", use_container_width=True)
 
 with col2:
     st.header("2. Kết quả nhận diện")

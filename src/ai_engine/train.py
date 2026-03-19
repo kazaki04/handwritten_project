@@ -40,7 +40,7 @@ class TrainConfig:
     project_root: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
     img_height: int   = 32
-    img_width:  int   = 160   # T=40 timesteps → allows up to 38 chars per sample
+    img_width:  int   = 160   
 
     epochs:         int   = 200
     batch_size:     int   = 32
